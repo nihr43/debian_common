@@ -23,11 +23,11 @@
 
 - name: enforce authorized_keys
   copy:
-    src: authorized_keys
-    dest: /root/.ssh/authorized_keys
-    owner: root
-    group: root
-    mode: '0700'
+   src: authorized_keys
+   dest: /root/.ssh/authorized_keys
+   owner: root
+   group: root
+   mode: '0700'
 
 - name: configure repos
   template:
