@@ -1,0 +1,49 @@
+---
+
+- name: enforce ssh key auth
+  ansible.builtin.lineinfile:
+   path: /etc/ssh/sshd_config
+   regexp: '^#PermitRootLogin|^PermitRootLogin'
+   line: PermitRootLogin prohibit-password
+  notify: restart sshd
+
+- name: disable sshd passwords
+  ansible.builtin.lineinfile:
+   path: /etc/ssh/sshd_config
+   regexp: '^#PasswordAuthentication|^PasswordAuthentication'
+   line: PasswordAuthentication no
+  notify: restart sshd
+
+- name: disable sshd pam
+  ansible.builtin.lineinfile:
+   path: /etc/ssh/sshd_config
+   regexp: '^#UsePAM|^UsePAM'
+   line: UsePAM no
+  notify: restart sshd
+
+- name: enforce authorized_keys
+  copy:
+    src: authorized_keys
+    dest: /root/.ssh/authorized_keys
+    owner: root
+    group: root
+    mode: '0700'
+
+- name: configure repos
+  template:
+   src: sources.list
+   dest: /etc/apt/sources.list
+
+- name: install role packages
+  package: name=vim,htop,git,bridge-utils,sudo,ifenslave,chrony
+
+- name: enable chrony
+  service:
+   name: chrony
+   enabled: true
+   state: started
+
+- name: configure dns
+  template:
+   src: resolv.conf
+   dest: /etc/resolv.conf

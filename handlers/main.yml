@@ -1,0 +1,9 @@
+---
+
+- name: restart sshd
+  service: name=sshd state=restarted
+  listen: "restart sshd"
+
+- name: daemon-reload
+  shell: systemctl daemon-reload
+  listen: "daemon-reload"
