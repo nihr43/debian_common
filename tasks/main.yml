@@ -1,26 +1,26 @@
 ---
-- name: enforce ssh key auth
+- name: Enforce ssh key auth
   ansible.builtin.lineinfile:
     path: /etc/ssh/sshd_config
     regexp: ^#PermitRootLogin|^PermitRootLogin
     line: PermitRootLogin prohibit-password
   notify: restart sshd
 
-- name: disable sshd passwords
+- name: Disable sshd passwords
   ansible.builtin.lineinfile:
     path: /etc/ssh/sshd_config
     regexp: ^#PasswordAuthentication|^PasswordAuthentication
     line: PasswordAuthentication no
   notify: restart sshd
 
-- name: disable sshd pam
+- name: Disable sshd pam
   ansible.builtin.lineinfile:
     path: /etc/ssh/sshd_config
     regexp: ^#UsePAM|^UsePAM
     line: UsePAM no
   notify: restart sshd
 
-- name: enforce authorized_keys
+- name: Enforce authorized_keys
   ansible.builtin.copy:
     src: authorized_keys
     dest: /root/.ssh/authorized_keys
@@ -28,21 +28,24 @@
     group: root
     mode: "0700"
 
-- name: configure repos
+- name: Configure repos
   ansible.builtin.template:
     src: sources.list
     dest: /etc/apt/sources.list
+    mode: "0644"
 
-- name: install role packages
-  ansible.builtin.package: name=vim,htop,git,bridge-utils,sudo,ifenslave,chrony
+- name: Install role packages
+  ansible.builtin.package:
+    name: vim,htop,git,bridge-utils,sudo,ifenslave,chrony
 
-- name: enable chrony
+- name: Enable chrony
   ansible.builtin.service:
     name: chrony
     enabled: true
     state: started
 
-- name: configure dns
+- name: Configure dns
   ansible.builtin.template:
     src: resolv.conf
     dest: /etc/resolv.conf
+    mode: "0644"
