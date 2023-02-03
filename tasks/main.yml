@@ -43,6 +43,7 @@
     name: chrony
     enabled: true
     state: started
+  ignore_errors: true
 
 - name: Configure dns
   ansible.builtin.template:
