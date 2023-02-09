@@ -9,3 +9,8 @@
   ansible.builtin.systemd:
     daemon_reload: true
   listen: daemon-reload
+
+- name: Apt update
+  ansible.builtin.apt:
+    update_cache: true
+  listen: apt update
