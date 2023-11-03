@@ -21,13 +21,6 @@
     line: PasswordAuthentication no
   notify: restart sshd
 
-- name: Disable sshd pam
-  ansible.builtin.lineinfile:
-    path: /etc/ssh/sshd_config
-    regexp: ^#UsePAM|^UsePAM
-    line: UsePAM no
-  notify: restart sshd
-
 - name: Enforce authorized_keys
   ansible.builtin.copy:
     src: authorized_keys
